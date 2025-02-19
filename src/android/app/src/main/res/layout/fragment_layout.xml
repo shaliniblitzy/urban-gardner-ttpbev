@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Root ConstraintLayout for garden layout screen -->
+<!-- androidx.constraintlayout.widget:constraintlayout:2.1.4 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    android:animateLayoutChanges="true">
+
+    <!-- Interactive garden grid view component -->
+    <com.gardenplanner.presentation.components.GardenGridView
+        android:id="@+id/garden_grid_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/grid_margin"
+        android:contentDescription="@string/garden_layout_grid_description"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <!-- Loading indicator for layout generation -->
+    <!-- androidx.core:core:1.10.0 -->
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/loading_indicator"
+        style="@style/Widget.MaterialComponents.CircularProgressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:contentDescription="@string/loading_layout_description"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="gone"/>
+
+    <!-- Error message display -->
+    <!-- com.google.android.material:material:1.9.0 -->
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/layout_generation_error"
+        android:textColor="@color/error_text"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:padding="@dimen/error_text_padding"
+        android:drawableTop="@drawable/ic_error"
+        android:drawablePadding="@dimen/error_drawable_padding"
+        android:contentDescription="@string/error_message_description"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="gone"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
