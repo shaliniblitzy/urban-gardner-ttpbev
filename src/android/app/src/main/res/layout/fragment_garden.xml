@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/garden_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Garden Area Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/area_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/garden_area_hint"
+        app:helperText="@string/garden_area_helper"
+        app:errorEnabled="true"
+        app:counterEnabled="true"
+        app:counterMaxLength="4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/area_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLength="4"
+            android:importantForAutofill="no"
+            android:digits="0123456789."
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Sunlight Conditions Spinner -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/sunlight_spinner_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/sunlight_conditions_hint"
+        app:layout_constraintTop_toBottomOf="@id/area_input_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/sunlight_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:minHeight="48dp"
+            android:importantForAccessibility="yes"
+            android:contentDescription="@string/sunlight_spinner_description" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Garden Grid Visualization -->
+    <com.gardenplanner.presentation.components.GardenGridView
+        android:id="@+id/garden_grid_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/garden_grid_background"
+        android:elevation="4dp"
+        android:importantForAccessibility="yes"
+        android:contentDescription="@string/garden_grid_description"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@id/sunlight_spinner_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/vegetable_requirements_group" />
+
+    <!-- Vegetable Requirements Section -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/vegetable_requirements_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="requirements_title,requirements_recycler_view" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/requirements_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vegetable_requirements_title"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/requirements_recycler_view"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/requirements_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="100dp"
+        android:layout_marginBottom="16dp"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/generate_layout_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_vegetable_requirement" />
+
+    <!-- Generate Layout Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/generate_layout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/generate_layout_button"
+        android:minHeight="48dp"
+        android:insetTop="6dp"
+        android:insetBottom="6dp"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:importantForAccessibility="yes"
+        android:contentDescription="@string/generate_layout_button_description" />
+
+    <!-- Loading Progress -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
