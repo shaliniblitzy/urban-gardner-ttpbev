@@ -1,0 +1,27 @@
+pluginManagement {
+    repositories {
+        // v8.1.0 - Android Gradle Plugin repository
+        google()
+        // v8.0 - Gradle plugin portal for build system plugins
+        gradlePluginPortal()
+        // v8.0 - Maven Central for Java/Kotlin dependencies
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        // v8.1.0 - Google Maven repository for Android dependencies
+        google()
+        // v8.0 - Maven Central repository for Java/Kotlin dependencies
+        mavenCentral()
+    }
+}
+
+// Root project configuration
+rootProject.name = 'GardenPlanner'
+rootProject.projectDir = new File('src/android')
+
+// Include the main app module
+include ':app'
