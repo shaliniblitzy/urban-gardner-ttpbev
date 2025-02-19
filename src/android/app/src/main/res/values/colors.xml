@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design 3 Theme Colors -->
+    <color name="colorPrimary">#2E7D32</color>
+    <color name="colorPrimaryDark">#1B5E20</color>
+    <color name="colorSecondary">#81C784</color>
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorError">#F44336</color>
+
+    <!-- On Colors (Text/Icon colors for contrast) -->
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnBackground">#212121</color>
+    <color name="colorOnSurface">#212121</color>
+
+    <!-- Garden Zone Visualization Colors -->
+    <color name="gardenZoneFullSun">#FFA000</color>
+    <color name="gardenZonePartialShade">#7CB342</color>
+    <color name="gardenZoneFullShade">#546E7A</color>
+
+    <!-- Plant Status Indicator Colors -->
+    <color name="plantStatusHealthy">#4CAF50</color>
+    <color name="plantStatusNeedsAttention">#FFC107</color>
+    <color name="plantStatusCritical">#F44336</color>
+</resources>
