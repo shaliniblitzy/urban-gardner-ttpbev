@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Base light theme for Garden Planner application -->
+    <style name="Theme.GardenPlanner" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Color attributes -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- Garden zone visualization colors -->
+        <item name="colorZoneFullSun">@color/gardenZoneFullSun</item>
+        <item name="colorZonePartialShade">@color/gardenZonePartialShade</item>
+        <item name="colorZoneFullShade">@color/gardenZoneFullShade</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.GardenPlanner.Title</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.GardenPlanner.Body</item>
+
+        <!-- Widget styles -->
+        <item name="materialButtonStyle">@style/Widget.GardenPlanner.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.GardenPlanner.Card</item>
+        <item name="gardenZoneIndicatorStyle">@style/Widget.GardenPlanner.Card.Plant</item>
+
+        <!-- Elevation -->
+        <item name="elevationLevel1">1dp</item>
+        <item name="elevationLevel2">3dp</item>
+        <item name="elevationLevel3">6dp</item>
+
+        <!-- System bars -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+
+        <!-- Shape appearance -->
+        <item name="shapeAppearanceSmallComponent">4dp</item>
+        <item name="shapeAppearanceMediumComponent">8dp</item>
+        <item name="shapeAppearanceLargeComponent">12dp</item>
+
+        <!-- Material motion -->
+        <item name="motionDurationShort1">100</item>
+        <item name="motionDurationMedium1">200</item>
+        <item name="motionDurationLong1">300</item>
+    </style>
+
+    <!-- Dark theme variant for Garden Planner application -->
+    <style name="Theme.GardenPlanner.Dark" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Color attributes -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- Garden zone visualization colors -->
+        <item name="colorZoneFullSun">@color/gardenZoneFullSun</item>
+        <item name="colorZonePartialShade">@color/gardenZonePartialShade</item>
+        <item name="colorZoneFullShade">@color/gardenZoneFullShade</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.GardenPlanner.Title</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.GardenPlanner.Body</item>
+
+        <!-- Widget styles -->
+        <item name="materialButtonStyle">@style/Widget.GardenPlanner.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.GardenPlanner.Card</item>
+        <item name="gardenZoneIndicatorStyle">@style/Widget.GardenPlanner.Card.Plant</item>
+
+        <!-- Elevation -->
+        <item name="elevationLevel1">2dp</item>
+        <item name="elevationLevel2">4dp</item>
+        <item name="elevationLevel3">8dp</item>
+
+        <!-- System bars -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:navigationBarColor">@color/colorBackground</item>
+
+        <!-- Shape appearance -->
+        <item name="shapeAppearanceSmallComponent">4dp</item>
+        <item name="shapeAppearanceMediumComponent">8dp</item>
+        <item name="shapeAppearanceLargeComponent">12dp</item>
+
+        <!-- Material motion -->
+        <item name="motionDurationShort1">100</item>
+        <item name="motionDurationMedium1">200</item>
+        <item name="motionDurationLong1">300</item>
+    </style>
+
+    <!-- Custom attributes for garden-specific UI elements -->
+    <declare-styleable name="GardenPlannerTheme">
+        <attr name="colorZoneFullSun" format="color" />
+        <attr name="colorZonePartialShade" format="color" />
+        <attr name="colorZoneFullShade" format="color" />
+        <attr name="gardenZoneIndicatorStyle" format="reference" />
+        <attr name="elevationLevel1" format="dimension" />
+        <attr name="elevationLevel2" format="dimension" />
+        <attr name="elevationLevel3" format="dimension" />
+    </declare-styleable>
+
+</resources>
