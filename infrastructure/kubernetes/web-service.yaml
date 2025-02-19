@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: garden-planner-web
+  namespace: default
+  labels:
+    app: garden-planner
+    component: web
+    environment: production
+    tier: frontend
+  annotations:
+    # Monitoring configuration
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/path: "/metrics"
+    # Load balancer configuration
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    # Service mesh configuration
+    linkerd.io/inject: "enabled"
+    sidecar.istio.io/inject: "true"
+
+spec:
+  # Internal cluster IP for service discovery
+  type: ClusterIP
+  
+  # Port configuration matching the container port from web-deployment
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  
+  # Selector matching deployment pod labels
+  selector:
+    app: garden-planner
+    component: web
+    environment: production
+  
+  # Session affinity configuration for consistent routing
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800  # 3 hour session stickiness
+  
+  # Topology spread configuration for high availability
+  topologyKeys:
+    - "kubernetes.io/hostname"      # Prefer different nodes
+    - "topology.kubernetes.io/zone" # Then different zones
+    - "topology.kubernetes.io/region" # Then different regions
+    - "*"                          # Fallback to any topology
