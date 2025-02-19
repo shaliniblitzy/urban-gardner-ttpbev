@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_medium"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="@dimen/schedule_item_height"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    android:importantForAccessibility="yes"
+    android:contentDescription="@string/schedule_item_description">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/schedule_task_padding"
+        android:baselineAligned="false">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/taskCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:minWidth="@dimen/min_touch_target_size"
+            android:minHeight="@dimen/min_touch_target_size"
+            android:contentDescription="@string/checkbox_task_complete"
+            app:buttonTint="@color/colorPrimary"
+            android:saveEnabled="true"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:duplicateParentState="true">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textColor="@color/colorOnSurface"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:accessibilityHeading="true"
+                tools:text="Water Plants"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/taskDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="@color/colorOnSurface"
+                android:ellipsize="end"
+                android:maxLines="1"
+                tools:text="May 15, 2024"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/spacing_small">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/taskPlant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="@color/colorSecondary"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="Tomatoes"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/taskZone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_medium"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="@color/colorSecondary"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="Zone 1"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/taskPriorityIndicator"
+            android:layout_width="@dimen/icon_size_small"
+            android:layout_height="@dimen/icon_size_small"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:contentDescription="@string/priority_indicator_description"
+            android:src="@drawable/ic_priority"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
