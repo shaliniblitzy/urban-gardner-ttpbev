@@ -1,0 +1,26 @@
+{
+  "watch": [
+    "src/**/*.ts",
+    "src/**/*.json"
+  ],
+  "ignore": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts", 
+    "src/tests/**/*",
+    "node_modules",
+    "dist"
+  ],
+  "exec": "ts-node src/index.ts",
+  "ext": ".ts,.js,.json",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": "1500",
+  "verbose": true,
+  "restartable": "rs",
+  "events": {
+    "start": "echo 'Garden Planner Backend Server Starting...'",
+    "restart": "echo 'Garden Planner Backend Server Restarting...'", 
+    "crash": "echo 'Garden Planner Backend Server Crashed - Attempting Restart...'"
+  }
+}
