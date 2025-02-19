@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base spacing units for consistent component separation -->
+    <dimen name="spacing_small">8dp</dimen>
+    <dimen name="spacing_medium">16dp</dimen>
+    <dimen name="spacing_large">24dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <!-- Standard padding values -->
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+
+    <!-- Standard margin values -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!-- Component heights -->
+    <dimen name="input_field_height">56dp</dimen>
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="plant_card_height">120dp</dimen>
+    <dimen name="schedule_item_height">72dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+
+    <!-- Grid and layout dimensions -->
+    <dimen name="garden_grid_cell_size">64dp</dimen>
+    <dimen name="grid_cell_size">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_medium">14sp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+
+    <!-- Icon sizes -->
+    <dimen name="icon_size_small">24dp</dimen>
+    <dimen name="icon_size_medium">32dp</dimen>
+    <dimen name="icon_size_large">48dp</dimen>
+
+    <!-- Card styling -->
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
+
+    <!-- Responsive breakpoints -->
+    <dimen name="screen_size_small">375dp</dimen>
+    <dimen name="screen_size_medium">768dp</dimen>
+
+    <!-- Garden layout specific dimensions -->
+    <dimen name="garden_layout_min_height">320dp</dimen>
+    <dimen name="garden_layout_max_height">640dp</dimen>
+    <dimen name="garden_zone_indicator_size">16dp</dimen>
+    <dimen name="garden_plant_icon_size">40dp</dimen>
+
+    <!-- Schedule view specific dimensions -->
+    <dimen name="schedule_timeline_width">4dp</dimen>
+    <dimen name="schedule_indicator_size">12dp</dimen>
+    <dimen name="schedule_task_padding">12dp</dimen>
+
+    <!-- Component-specific dimensions -->
+    <dimen name="progress_bar_height">4dp</dimen>
+    <dimen name="checkbox_size">24dp</dimen>
+    <dimen name="radio_button_size">24dp</dimen>
+    <dimen name="switch_thumb_size">24dp</dimen>
+    <dimen name="switch_track_height">14dp</dimen>
+
+    <!-- Touch target sizes -->
+    <dimen name="min_touch_target_size">48dp</dimen>
+    <dimen name="list_item_min_height">48dp</dimen>
+    <dimen name="clickable_area_min_size">48dp</dimen>
+</resources>
