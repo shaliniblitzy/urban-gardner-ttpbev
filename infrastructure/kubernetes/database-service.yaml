@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+  namespace: garden-planner
+  labels:
+    app: garden-planner
+    component: database
+    tier: data
+    environment: production
+  annotations:
+    # Enable topology-aware routing for better performance
+    service.kubernetes.io/topology-aware-hints: "auto"
+    # Enable Prometheus metrics scraping
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5432"
+spec:
+  # Select database pods based on labels
+  selector:
+    app: garden-planner
+    component: database
+    tier: data
+  
+  # Port configuration for SQLite database access
+  ports:
+    - name: database
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  
+  # Headless service for StatefulSet DNS-based discovery
+  clusterIP: None
+  
+  # Use ClusterIP type for internal access only
+  type: ClusterIP
+  
+  # Enable session affinity for consistent connections
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      # 3-hour timeout for session affinity
+      timeoutSeconds: 10800
+  
+  # Don't publish pods that aren't ready
+  publishNotReadyAddresses: false
+  
+  # Route traffic to local endpoints when possible
+  internalTrafficPolicy: Local
