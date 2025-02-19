@@ -1,0 +1,135 @@
+# Disabled rules that don't align with project requirements
+disabled_rules:
+  - trailing_whitespace
+  - vertical_whitespace_opening_braces
+  - vertical_whitespace_closing_braces
+
+# Opt-in rules for enhanced code quality
+opt_in_rules:
+  - empty_count
+  - explicit_init
+  - closure_spacing
+  - overridden_super_call
+  - redundant_nil_coalescing
+  - private_outlet
+  - nimble_operator
+  - attributes
+  - operator_usage_whitespace
+  - closure_end_indentation
+  - first_where
+  - prohibited_super_call
+  - fatal_error_message
+  - unneeded_parentheses_in_closure_argument
+  - pattern_matching_keywords
+  - array_init
+  - number_separator
+  - strict_fileprivate
+  - object_literal
+  - contains_over_first_not_nil
+  - override_in_extension
+  - private_action
+  - quick_discouraged_call
+  - quick_discouraged_focused_test
+  - quick_discouraged_pending_test
+  - garden_layout_validation
+  - plant_database_access
+  - notification_handler
+  - space_optimization_algorithm
+
+# Excluded paths from linting
+excluded:
+  - Pods
+  - GardenPlannerTests
+  - GardenPlannerUITests
+  - Generated
+
+# Line length configuration
+line_length:
+  warning: 120
+  error: 200
+  ignores_comments: true
+  ignores_urls: true
+
+# Type body length limits
+type_body_length:
+  warning: 300
+  error: 400
+
+# File length limits
+file_length:
+  warning: 500
+  error: 1000
+
+# Function body length limits
+function_body_length:
+  warning: 50
+  error: 100
+
+# Type name rules
+type_name:
+  min_length: 3
+  max_length: 40
+  excluded:
+    - Id
+    - URL
+    - URI
+    - RGB
+    - HSB
+
+# Identifier name rules
+identifier_name:
+  min_length: 2
+  max_length: 40
+  excluded:
+    - id
+    - x
+    - y
+    - dx
+    - dy
+    - pH
+    - m2
+    - sq
+
+# Nesting configuration
+nesting:
+  type_level: 2
+
+# Cyclomatic complexity limits
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+
+# Reporter configuration
+reporter: xcode
+
+# Custom rules specific to Garden Planner application
+custom_rules:
+  garden_planner_todo:
+    regex: "(?i)(//\\s*TODO:)"
+    message: "TODOs should be resolved or converted to issues"
+    severity: warning
+
+  garden_planner_mark:
+    regex: "(?i)//\\s*MARK:\\s*-?\\s*$"
+    message: "MARK comment should not be empty"
+    severity: warning
+
+  garden_layout_validation:
+    regex: "validate(GardenLayout|PlantSpacing|SunlightZones)\\s*\\{[^}]*\\}"
+    message: "Garden layout validation must use the standardized validation protocol"
+    severity: error
+
+  notification_scheduling:
+    regex: "scheduleNotification\\s*\\([^)]*\\)\\s*\\{[^}]*\\}"
+    message: "Notification scheduling must follow the FCM integration protocol"
+    severity: error
+
+  space_optimization_comment:
+    regex: "//\\s*Space\\s*Optimization\\s*Algorithm"
+    message: "Space optimization implementations must be documented with complexity analysis"
+    severity: warning
+
+  database_access_pattern:
+    regex: "(read|write|query)(PlantDatabase|GardenLayout)\\s*\\{"
+    message: "Database access must use the approved repository pattern"
+    severity: error
