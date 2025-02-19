@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garden-planner-web
+  namespace: default
+  labels:
+    app: garden-planner
+    component: web
+    environment: production
+  annotations:
+    kubernetes.io/description: "Garden Planner web frontend deployment"
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
+    prometheus.io/path: "/metrics"
+
+spec:
+  # High availability with 2 replicas
+  replicas: 2
+  
+  # Pod selector matching
+  selector:
+    matchLabels:
+      app: garden-planner
+      component: web
+  
+  # Deployment strategy
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  
+  # Pod template
+  template:
+    metadata:
+      labels:
+        app: garden-planner
+        component: web
+      annotations:
+        checksum/config: "${CONFIG_CHECKSUM}"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+    
+    spec:
+      # Security context
+      securityContext:
+        runAsUser: 101
+        runAsGroup: 101
+        fsGroup: 101
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      
+      # Container specifications
+      containers:
+        - name: web
+          image: garden-planner/web:latest
+          imagePullPolicy: Always
+          
+          # Resource limits and requests
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          
+          # Port configuration
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          
+          # Liveness probe
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Readiness probe
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Environment variables
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "80"
+            - name: API_URL
+              value: "http://garden-planner-backend:8080"
+            - name: BUILD_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: garden-planner-config
+                  key: BUILD_VERSION
+          
+          # Volume mounts
+          volumeMounts:
+            - name: secrets
+              mountPath: /app/secrets
+              readOnly: true
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+          
+          # Security context
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+      
+      # Volumes
+      volumes:
+        - name: secrets
+          secret:
+            secretName: garden-planner-secrets
+            defaultMode: 0400
+        - name: nginx-config
+          configMap:
+            name: garden-planner-nginx-config
+            defaultMode: 0400
+        - name: tmp
+          emptyDir: {}
+      
+      # Pod specifications
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      
+      # Node selection
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - garden-planner
+                    - key: component
+                      operator: In
+                      values:
+                        - web
+                topologyKey: kubernetes.io/hostname
+      
+      # Tolerations
+      tolerations:
+        - key: "node.kubernetes.io/not-ready"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 300
+        - key: "node.kubernetes.io/unreachable"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 300
