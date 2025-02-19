@@ -1,0 +1,173 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/backend/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/backend/**'
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.x'
+  CACHE_KEY_PREFIX: backend-deps
+
+jobs:
+  build:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/backend/package.json
+      
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            src/backend/node_modules
+            ~/.npm
+          key: ${{ env.CACHE_KEY_PREFIX }}-${{ hashFiles('src/backend/package.json') }}
+          restore-keys: |
+            ${{ env.CACHE_KEY_PREFIX }}-
+      
+      - name: Install dependencies
+        working-directory: src/backend
+        run: npm ci
+      
+      - name: Run security audit
+        working-directory: src/backend
+        run: npm run security-audit
+      
+      - name: Lint code
+        working-directory: src/backend
+        run: npm run lint
+      
+      - name: Build application
+        working-directory: src/backend
+        run: |
+          npm run clean
+          npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-dist
+          path: src/backend/dist
+          retention-days: 1
+
+  test:
+    name: Test Backend
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/backend/package.json
+      
+      - name: Install dependencies
+        working-directory: src/backend
+        run: npm ci
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-dist
+          path: src/backend/dist
+      
+      - name: Run unit tests
+        working-directory: src/backend
+        run: npm run test:unit
+      
+      - name: Run integration tests
+        working-directory: src/backend
+        env:
+          DATABASE_URL: 'sqlite::memory:'
+        run: npm run test:integration
+      
+      - name: Run E2E tests
+        working-directory: src/backend
+        env:
+          DATABASE_URL: 'sqlite::memory:'
+          NODE_ENV: 'test'
+        run: npm run test:e2e
+      
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: src/backend/coverage
+          retention-days: 7
+
+  deploy:
+    name: Deploy Backend
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/backend/package.json
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-dist
+          path: src/backend/dist
+      
+      - name: Install production dependencies
+        working-directory: src/backend
+        run: npm ci --only=production
+      
+      - name: Setup environment
+        working-directory: src/backend
+        run: |
+          echo "NODE_ENV=production" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "FIREBASE_CREDENTIALS='${{ secrets.FIREBASE_CREDENTIALS }}'" >> .env
+      
+      - name: Run database migrations
+        working-directory: src/backend
+        run: npm run migrate
+      
+      - name: Deploy application
+        id: deploy
+        working-directory: src/backend
+        env:
+          NODE_ENV: production
+        run: |
+          # Add deployment commands here based on hosting platform
+          echo "deployment-url=https://api.gardenplanner.com" >> $GITHUB_OUTPUT
+      
+      - name: Verify deployment
+        working-directory: src/backend
+        run: |
+          # Add health check verification
+          curl --fail ${{ steps.deploy.outputs.deployment-url }}/health || exit 1
