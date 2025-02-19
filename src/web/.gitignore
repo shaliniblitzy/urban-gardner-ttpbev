@@ -1,0 +1,95 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp/
+.pnp.js
+package-lock.json
+yarn.lock
+
+# Build outputs
+/dist/
+/build/
+/android/app/build/
+/ios/build/
+*.apk
+*.aab
+*.ipa
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+*.env
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+/coverage/
+/__snapshots__/
+*.snap
+/test-results/
+/playwright-report/
+/e2e/videos/
+/e2e/screenshots/
+
+# TypeScript
+*.tsbuildinfo
+*.js.map
+*.d.ts
+/tsconfig.tsbuildinfo
+
+# React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+.gradle/
+local.properties
+ios/Pods/
+vendor/
+
+# Caches
+.cache/
+.temp/
+tmp/
+.eslintcache
+.stylelintcache
+*.log
+
+# OS generated
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+
+# Security
+*.pem
+*.cert
+*.key
+*.crt
+secrets.json
+credentials.json
+
+# Misc
+.history/
+*.bak
+*.tmp
+*.swm
