@@ -1,0 +1,47 @@
+# Core team must review all changes by default
+* @garden-planner/core-team
+
+# Mobile platform-specific code ownership
+src/android/**  @garden-planner/android-team @garden-planner/mobile-architects
+src/ios/**      @garden-planner/ios-team @garden-planner/mobile-architects
+
+# Backend services and core logic
+src/backend/**  @garden-planner/backend-team @garden-planner/system-architects
+
+# Shared code requires both core team and architect review
+src/shared/**   @garden-planner/core-team @garden-planner/system-architects
+
+# Authentication and security-related code requires security team review
+src/*/auth/**   @garden-planner/security-team @garden-planner/system-architects
+
+# Infrastructure and deployment configuration
+infrastructure/**  @garden-planner/devops-team @garden-planner/security-team
+
+# CI/CD workflow configuration
+.github/workflows/**  @garden-planner/devops-team
+
+# Documentation changes
+docs/**/*.md  @garden-planner/docs-team
+
+# Test suites
+src/*/tests/**  @garden-planner/qa-team
+
+# Database schema and migrations
+src/*/database/**  @garden-planner/backend-team @garden-planner/system-architects
+
+# Core optimization algorithms
+src/*/optimization/**  @garden-planner/core-team @garden-planner/system-architects
+
+# UI Components
+src/*/ui/**  @garden-planner/mobile-architects @garden-planner/core-team
+
+# Configuration files
+*.json  @garden-planner/devops-team
+*.yml   @garden-planner/devops-team
+*.plist @garden-planner/ios-team
+*.gradle @garden-planner/android-team
+
+# Dependency management
+Podfile*      @garden-planner/ios-team
+Gemfile*      @garden-planner/ios-team
+build.gradle  @garden-planner/android-team
