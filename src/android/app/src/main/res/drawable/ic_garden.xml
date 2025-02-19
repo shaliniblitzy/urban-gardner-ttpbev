@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0"
+    android:tint="?attr/colorControlNormal"
+    android:autoMirrored="true">
+
+    <!-- Main garden house outline shape -->
+    <path
+        android:name="garden_outline"
+        android:fillColor="@color/colorPrimary"
+        android:pathData="M12,2L3,9H6V22H18V9H21L12,2M12,4.5L16,8V20H8V8L12,4.5"
+        android:strokeWidth="0" />
+
+    <!-- Decorative plant elements inside garden -->
+    <path
+        android:name="garden_plants"
+        android:fillColor="@color/colorPrimary"
+        android:pathData="M10,10V18H14V10H10M11,12H13V16H11V12"
+        android:strokeWidth="0" />
+
+    <!-- Content description for accessibility -->
+    <target android:name="garden_icon">
+        <description>Garden icon</description>
+        <minTouchTargetSize android:width="48dp" android:height="48dp" />
+    </target>
+
+</vector>
