@@ -1,0 +1,151 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../../src/backend
+      dockerfile: ../../infrastructure/docker/backend.Dockerfile
+      target: development
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DB_PATH=/data/garden.db
+      - LOG_LEVEL=debug
+      - MAX_MEMORY=512M
+      - JWT_SECRET=${JWT_SECRET}
+      - RATE_LIMIT_WINDOW=15
+      - RATE_LIMIT_MAX_REQUESTS=100
+    volumes:
+      - ./data:/data
+      - ../../src/backend:/app/src:ro
+      - backend_node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    mem_limit: 512M
+    cpus: 0.5
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  web:
+    build:
+      context: ../../src/web
+      dockerfile: ../../infrastructure/docker/web.Dockerfile
+      target: development
+      args:
+        - NODE_ENV=development
+        - API_URL=http://backend:3000
+    environment:
+      - NODE_ENV=development
+      - API_URL=http://backend:3000
+      - DEBUG=true
+    volumes:
+      - ../../src/web:/app/src:ro
+      - web_node_modules:/app/node_modules
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    mem_limit: 256M
+    cpus: 0.3
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  database:
+    image: sqlite:3
+    volumes:
+      - ./data:/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    environment:
+      - SQLITE_DATABASE=/data/garden.db
+      - SQLITE_JOURNAL_MODE=WAL
+      - SQLITE_SYNCHRONOUS=NORMAL
+      - SQLITE_TEMP_STORE=MEMORY
+      - SQLITE_CACHE_SIZE=-2000
+      - SQLITE_MMAP_SIZE=30000000000
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "sqlite3", "/data/garden.db", "SELECT 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    mem_limit: 128M
+    cpus: 0.2
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data
+      o: bind
+    labels:
+      backup: "required"
+      retention: "7d"
+  backend_node_modules:
+    driver: local
+  web_node_modules:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+    labels:
+      environment: "development"
+    driver_opts:
+      com.docker.network.bridge.name: "garden_net"
+      com.docker.network.driver.mtu: "1500"
+    attachable: true
