@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_medium"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/colorSurface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/list_item_min_height"
+        android:padding="@dimen/padding_medium">
+
+        <ImageView
+            android:id="@+id/plantImageView"
+            android:layout_width="@dimen/icon_size_large"
+            android:layout_height="@dimen/icon_size_large"
+            android:contentDescription="@string/plant_image_description"
+            android:minWidth="@dimen/min_touch_target_size"
+            android:minHeight="@dimen/min_touch_target_size"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/plantNameTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_medium"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/plantImageView"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Tomato Plant" />
+
+        <TextView
+            android:id="@+id/quantityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintStart_toStartOf="@id/plantNameTextView"
+            app:layout_constraintTop_toBottomOf="@id/plantNameTextView"
+            tools:text="Quantity: 5 plants" />
+
+        <TextView
+            android:id="@+id/spacingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_size_medium"
+            app:layout_constraintStart_toStartOf="@id/plantNameTextView"
+            app:layout_constraintTop_toBottomOf="@id/quantityTextView"
+            tools:text="Spacing: 12 inches" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
