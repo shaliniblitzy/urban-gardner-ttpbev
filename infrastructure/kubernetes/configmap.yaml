@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: garden-planner-config
+  namespace: default
+  labels:
+    app: garden-planner
+    component: backend
+    environment: production
+data:
+  # Server Configuration
+  server.json: |
+    {
+      "NODE_ENV": "production",
+      "PORT": "3000",
+      "API_VERSION": "v1",
+      "LOG_LEVEL": "info",
+      "REQUEST_TIMEOUT": "30000"
+    }
+
+  # Database Configuration
+  # Derived from database.config.ts settings
+  database.json: |
+    {
+      "DB_PATH": "/data/garden-planner.db",
+      "DB_MAX_CONNECTIONS": "10",
+      "DB_TIMEOUT": "60000",
+      "CACHE_SIZE": "-2000",
+      "BUSY_TIMEOUT": "30000",
+      "JOURNAL_MODE": "WAL",
+      "SYNCHRONOUS": "NORMAL",
+      "TEMP_STORE": "MEMORY",
+      "PAGE_SIZE": "4096",
+      "MMAP_SIZE": "30000000000",
+      "FOREIGN_KEYS": "ON",
+      "AUTOMATIC_INDEX": "ON"
+    }
+
+  # Notification Configuration
+  # Derived from notification.config.ts settings
+  notification.json: |
+    {
+      "FCM_PROJECT_ID": "garden-planner-prod",
+      "NOTIFICATION_BATCH_SIZE": "100",
+      "MAX_CONCURRENT_BATCHES": "5",
+      "DELIVERY_TIMEOUT": "1000",
+      "MAX_RETRIES": "3",
+      "INITIAL_RETRY_DELAY": "1000",
+      "MAX_RETRY_DELAY": "5000",
+      "BACKOFF_MULTIPLIER": "2",
+      "FCM_ANDROID_CHANNEL": "garden-maintenance",
+      "FCM_PRIORITY": "high"
+    }
+
+  # Security Configuration
+  security.json: |
+    {
+      "JWT_SECRET": "${JWT_SECRET}",
+      "JWT_EXPIRATION": "24h",
+      "JWT_REFRESH_EXPIRATION": "7d",
+      "ENCRYPTION_ALGORITHM": "aes-256-gcm",
+      "PASSWORD_HASH_ROUNDS": "12",
+      "SESSION_TIMEOUT": "3600000",
+      "RATE_LIMIT_WINDOW": "900000",
+      "RATE_LIMIT_MAX_ATTEMPTS": "5"
+    }
+
+  # Plant Database Configuration
+  plant_database.json: |
+    {
+      "CACHE_ENABLED": "true",
+      "CACHE_TTL": "3600",
+      "MAX_PLANTS_PER_QUERY": "100",
+      "SEARCH_RESULT_LIMIT": "50",
+      "UPDATE_INTERVAL": "86400"
+    }
+
+  # Garden Optimization Configuration
+  optimization.json: |
+    {
+      "MAX_GARDEN_AREA": "1000",
+      "MIN_GARDEN_AREA": "1",
+      "MAX_ZONES": "10",
+      "OPTIMIZATION_TIMEOUT": "3000",
+      "CACHE_OPTIMIZATION_RESULTS": "true",
+      "CACHE_DURATION": "86400"
+    }
+
+  # Maintenance Schedule Configuration
+  schedule.json: |
+    {
+      "DEFAULT_REMINDER_TIME": "09:00",
+      "SCHEDULE_LOOKAHEAD_DAYS": "7",
+      "MIN_NOTIFICATION_INTERVAL": "3600",
+      "MAX_DAILY_NOTIFICATIONS": "10",
+      "TASK_PRIORITY_LEVELS": "3"
+    }
