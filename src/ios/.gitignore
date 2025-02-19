@@ -1,0 +1,102 @@
+## Build generated
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+Index/
+ModuleCache.noindex/
+Build/
+PrecompiledHeaders/
+Products/
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.xcworkspace/xcuserdata/
+project.xcworkspace/
+timeline.xctimeline
+playground.xcworkspace
+
+## CocoaPods
+Pods/
+Podfile.lock
+
+## Carthage
+Carthage/Build/
+*.framework
+
+## Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+.accio/
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+fastlane/derived_data
+fastlane/metadata
+fastlane/*.env.*
+vendor/
+.bundle/
+
+## Code Injection
+injected_container.xcconfig
+
+## Secrets and Credentials
+*.mobileprovision
+*.cer
+*.p12
+*.key
+GoogleService-Info.plist
+Keys.plist
+Secrets.plist
+Configuration.plist
+APIKeys.plist
+AuthKey_*.p8
+.env
+.env.*
+firebase_credentials.json
+
+## OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Icon?
+
+## IDE
+.idea/
+*.swp
+*.swo
+*~
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+*.xcuserstate
+.last_build_id
