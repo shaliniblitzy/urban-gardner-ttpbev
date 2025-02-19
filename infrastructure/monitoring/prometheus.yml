@@ -1,0 +1,118 @@
+# Prometheus configuration file for Garden Planner application monitoring
+# Version: v2.45.0
+
+global:
+  # Global scrape interval and timeout settings
+  scrape_interval: 15s     # How frequently to scrape targets
+  evaluation_interval: 15s  # How frequently to evaluate rules
+  scrape_timeout: 10s      # How long until a scrape request times out
+
+  # External labels to identify this Prometheus instance
+  external_labels:
+    monitor: 'garden-planner-monitor'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+      scheme: 'http'
+      timeout: '5s'
+      api_version: 'v2'
+
+# Rule files containing alert definitions
+rule_files:
+  - 'rules/performance_alerts.yml'
+  - 'rules/error_alerts.yml'
+  - 'rules/usage_alerts.yml'
+  - 'rules/resource_alerts.yml'
+
+# Scrape configurations containing endpoints to monitor
+scrape_configs:
+  # Backend API monitoring
+  - job_name: 'garden-planner-backend'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['backend:8080']
+    scrape_interval: 10s
+    labels:
+      service: 'backend'
+      environment: 'production'
+      component: 'api'
+
+  # System metrics monitoring via node-exporter
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 15s
+    labels:
+      service: 'system'
+      environment: 'production'
+      component: 'hardware'
+
+  # API Gateway monitoring
+  - job_name: 'api-gateway'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['api-gateway:9000']
+    scrape_interval: 10s
+    labels:
+      service: 'api-gateway'
+      environment: 'production'
+      component: 'gateway'
+
+  # Database monitoring
+  - job_name: 'garden-planner-database'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['database:9187']
+    scrape_interval: 30s
+    labels:
+      service: 'database'
+      environment: 'production'
+      component: 'storage'
+
+  # Additional scrape configs for performance monitoring
+  - job_name: 'performance-metrics'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['performance-monitor:8081']
+    scrape_interval: 10s
+    labels:
+      service: 'monitoring'
+      environment: 'production'
+      component: 'performance'
+
+  # Error tracking metrics
+  - job_name: 'error-tracking'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['error-monitor:8082']
+    scrape_interval: 15s
+    labels:
+      service: 'monitoring'
+      environment: 'production'
+      component: 'errors'
+
+  # Usage analytics metrics
+  - job_name: 'usage-analytics'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['analytics:8083']
+    scrape_interval: 30s
+    labels:
+      service: 'monitoring'
+      environment: 'production'
+      component: 'analytics'
+
+  # Resource utilization metrics
+  - job_name: 'resource-metrics'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['resource-monitor:8084']
+    scrape_interval: 15s
+    labels:
+      service: 'monitoring'
+      environment: 'production'
+      component: 'resources'
