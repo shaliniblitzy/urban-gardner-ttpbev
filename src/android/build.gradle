@@ -1,0 +1,81 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.1.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.47"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.7.0"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+ext {
+    compileSdkVersion = 34
+    targetSdkVersion = 34
+    minSdkVersion = 24
+    buildToolsVersion = "34.0.0"
+
+    androidxCoreVersion = "1.10.1"
+    androidxAppCompatVersion = "1.6.1"
+    materialVersion = "1.9.0"
+    navigationVersion = "2.7.0"
+    roomVersion = "2.5.2"
+    hiltVersion = "2.47"
+    workVersion = "2.8.0"
+    composeVersion = "1.5.0"
+    composeCompilerVersion = "1.5.0"
+    composeMaterial3Version = "1.1.1"
+    lifecycleVersion = "2.6.1"
+    coroutinesVersion = "1.7.3"
+    retrofitVersion = "2.9.0"
+    okhttpVersion = "4.11.0"
+    moshiVersion = "1.15.0"
+    coilVersion = "2.4.0"
+    junitVersion = "4.13.2"
+    androidxTestVersion = "1.1.5"
+    espressoVersion = "3.5.1"
+    mockkVersion = "1.13.5"
+    turbineVersion = "1.0.0"
+    benchmarkVersion = "1.2.0"
+    leakcanaryVersion = "2.12"
+    timberVersion = "5.0.1"
+    firebaseMessagingVersion = "23.2.1"
+    glideVersion = "4.15.1"
+    biometricVersion = "1.2.0-alpha05"
+    securityCryptoVersion = "1.1.0-alpha06"
+    swipeRefreshLayoutVersion = "1.1.0"
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "11"
+            freeCompilerArgs += [
+                "-opt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            ]
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force "org.jetbrains.kotlin:kotlin-stdlib:1.9.0"
+        force "org.jetbrains.kotlin:kotlin-stdlib-common:1.9.0"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0"
+        force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+    }
+}
