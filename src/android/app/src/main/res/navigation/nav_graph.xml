@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/gardenFragment">
+
+    <!-- Garden Setup Fragment -->
+    <fragment
+        android:id="@+id/gardenFragment"
+        android:name="com.gardenplanner.presentation.garden.GardenFragment"
+        android:label="Garden Setup"
+        tools:layout="@layout/fragment_garden">
+        
+        <action
+            android:id="@+id/action_garden_to_layout"
+            app:destination="@id/layoutFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            
+            <argument
+                android:name="gardenData"
+                app:argType="com.gardenplanner.domain.model.GardenData"
+                app:nullable="false" />
+        </action>
+
+        <action
+            android:id="@+id/action_garden_to_settings"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <!-- Garden Layout Fragment -->
+    <fragment
+        android:id="@+id/layoutFragment"
+        android:name="com.gardenplanner.presentation.layout.LayoutFragment"
+        android:label="Garden Layout"
+        tools:layout="@layout/fragment_layout">
+
+        <argument
+            android:name="gardenData"
+            app:argType="com.gardenplanner.domain.model.GardenData"
+            app:nullable="false" />
+
+        <action
+            android:id="@+id/action_layout_to_schedule"
+            app:destination="@id/scheduleFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            
+            <argument
+                android:name="layoutId"
+                app:argType="string"
+                app:nullable="false" />
+        </action>
+
+        <action
+            android:id="@+id/action_layout_to_settings"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <!-- Maintenance Schedule Fragment -->
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.gardenplanner.presentation.schedule.ScheduleFragment"
+        android:label="Maintenance Schedule"
+        tools:layout="@layout/fragment_schedule">
+
+        <argument
+            android:name="layoutId"
+            app:argType="string"
+            app:nullable="false" />
+
+        <deepLink
+            android:id="@+id/deeplink_schedule"
+            app:uri="garden://schedule/{scheduleId}"
+            android:autoVerify="true" />
+
+        <action
+            android:id="@+id/action_schedule_to_settings"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <!-- Settings Fragment -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.gardenplanner.presentation.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+
+        <deepLink
+            android:id="@+id/deeplink_settings"
+            app:uri="garden://settings"
+            android:autoVerify="true" />
+
+        <action
+            android:id="@+id/action_settings_to_garden"
+            app:destination="@id/gardenFragment"
+            app:popUpTo="@id/gardenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Global Actions -->
+    <action
+        android:id="@+id/action_global_settings"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim" />
+
+</navigation>
