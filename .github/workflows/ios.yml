@@ -1,0 +1,181 @@
+name: iOS Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/ios/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/ios/**'
+  workflow_dispatch:
+
+env:
+  DEVELOPER_APP_ID: ${{ secrets.DEVELOPER_APP_ID }}
+  DEVELOPER_APP_IDENTIFIER: ${{ secrets.DEVELOPER_APP_IDENTIFIER }}
+  PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+  APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+  APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+  APPLE_KEY_CONTENT: ${{ secrets.APPLE_KEY_CONTENT }}
+  MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+  MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+  FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  ERROR_NOTIFICATION_EMAIL: ${{ secrets.ERROR_NOTIFICATION_EMAIL }}
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate Build Environment
+    runs-on: macos-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.138.0
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/Library/Caches/CocoaPods
+            Pods
+            vendor/bundle
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+            
+      - name: Validate Environment Variables
+        run: |
+          if [ -z "$DEVELOPER_APP_ID" ]; then
+            echo "Error: DEVELOPER_APP_ID is not set"
+            exit 1
+          fi
+          if [ -z "$MATCH_GIT_URL" ]; then
+            echo "Error: MATCH_GIT_URL is not set"
+            exit 1
+          fi
+
+  test:
+    name: Run Tests
+    needs: validate
+    runs-on: macos-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.138.0
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec pod install
+        working-directory: src/ios
+          
+      - name: Run Unit Tests
+        run: |
+          bundle exec fastlane test
+        working-directory: src/ios
+        env:
+          SCAN_DEVICE: "iPhone 14"
+          SCAN_SCHEME: "GardenPlanner"
+          
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: src/ios/fastlane/test_output
+          retention-days: 14
+
+  beta:
+    name: Deploy TestFlight Beta
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: macos-latest
+    timeout-minutes: 45
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1.138.0
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          
+      - name: Install Dependencies
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+          bundle exec pod install
+        working-directory: src/ios
+          
+      - name: Setup Keychain
+        run: |
+          security create-keychain -p "" build.keychain
+          security list-keychains -s build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security set-keychain-settings
+          
+      - name: Setup Provisioning Profiles
+        run: |
+          bundle exec fastlane sync_certificates
+        working-directory: src/ios
+        env:
+          MATCH_KEYCHAIN_NAME: build.keychain
+          MATCH_KEYCHAIN_PASSWORD: ""
+          
+      - name: Build and Deploy Beta
+        run: |
+          bundle exec fastlane beta
+        working-directory: src/ios
+        env:
+          FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+          
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-beta
+          path: src/ios/GardenPlanner.ipa
+          retention-days: 14
+          
+      - name: Notify Success
+        if: success()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"✅ Successfully deployed new beta build to TestFlight"}' \
+          $SLACK_WEBHOOK_URL
+          
+      - name: Notify Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data '{"text":"❌ Failed to deploy beta build to TestFlight"}' \
+          $SLACK_WEBHOOK_URL
