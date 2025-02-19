@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108"
+    android:tint="#81C784">
+
+    <!-- Garden icon with proper scaling and positioning for adaptive icon -->
+    <group
+        android:scaleX="0.6"
+        android:scaleY="0.6"
+        android:translateX="22"
+        android:translateY="22">
+
+        <!-- Main garden pot shape -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M48,24c0-13.3-10.7-24-24-24S0,10.7,0,24c0,10.5,6.7,19.5,16,22.9V56h16V46.9C41.3,43.5,48,34.5,48,24z" />
+
+        <!-- Plant stem -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M32,60v12h-8V60H32z" />
+
+        <!-- Leaf shapes -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M28,52c3.5-2,7-6,8-10c-3.5,2-7,6-8,10z" />
+        
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M20,52c-3.5-2-7-6-8-10c3.5,2,7,6,8,10z" />
+
+        <!-- Additional decorative leaves -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M24,45c2.5-3,4-7,4-11c-2.5,3-4,7-4,11z" />
+        
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M24,45c-2.5-3-4-7-4-11c2.5,3,4,7,4,11z" />
+    </group>
+</vector>
