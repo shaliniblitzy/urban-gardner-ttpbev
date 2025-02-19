@@ -1,0 +1,146 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database
+  namespace: garden-planner
+  labels:
+    app: garden-planner
+    component: database
+    tier: storage
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '5432'
+spec:
+  serviceName: database-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garden-planner
+      component: database
+  template:
+    metadata:
+      labels:
+        app: garden-planner
+        component: database
+    spec:
+      securityContext:
+        fsGroup: 2000
+        runAsUser: 1000
+        runAsNonRoot: true
+      containers:
+      - name: sqlite
+        image: sqlite:3.39-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+          name: database
+          protocol: TCP
+        volumeMounts:
+        - name: database-storage
+          mountPath: /data
+          readOnly: false
+        - name: backup-storage
+          mountPath: /backup
+          readOnly: false
+        env:
+        - name: DB_PATH
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: DB_PATH
+        - name: DB_MAX_CONNECTIONS
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: DB_MAX_CONNECTIONS
+        - name: CACHE_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: CACHE_SIZE
+        - name: BUSY_TIMEOUT
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: BUSY_TIMEOUT
+        - name: JOURNAL_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: JOURNAL_MODE
+        - name: SYNCHRONOUS
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: SYNCHRONOUS
+        - name: PAGE_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: PAGE_SIZE
+        - name: MMAP_SIZE
+          valueFrom:
+            configMapKeyRef:
+              name: garden-planner-config
+              key: MMAP_SIZE
+        - name: DB_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: garden-planner-secrets
+              key: ENCRYPTION_KEY
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: 100m
+            ephemeral-storage: 1Gi
+          limits:
+            memory: 512Mi
+            cpu: 500m
+            ephemeral-storage: 2Gi
+        livenessProbe:
+          exec:
+            command:
+            - sqlite3
+            - /data/garden-planner.db
+            - SELECT 1
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - sqlite3
+            - /data/garden-planner.db
+            - SELECT 1
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        startupProbe:
+          exec:
+            command:
+            - sqlite3
+            - /data/garden-planner.db
+            - SELECT 1
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+      volumes:
+      - name: backup-storage
+        persistentVolumeClaim:
+          claimName: database-backup-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: database-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      storageClassName: standard
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: OrderedReady
