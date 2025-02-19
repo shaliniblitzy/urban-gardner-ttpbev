@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Title text appearance for garden interface headings -->
+    <style name="TextAppearance.GardenPlanner.Title" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/colorOnBackground</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.0125</item>
+        <item name="android:lineHeight">36sp</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <!-- Subtitle text appearance for section headers -->
+    <style name="TextAppearance.GardenPlanner.Subtitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorOnBackground</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:letterSpacing">0.0125</item>
+        <item name="android:lineHeight">28sp</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <!-- Body text appearance optimized for garden planning content -->
+    <style name="TextAppearance.GardenPlanner.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorOnBackground</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+        <item name="android:letterSpacing">0.0125</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <!-- Primary button style for garden planning actions -->
+    <style name="Widget.GardenPlanner.Button" parent="Widget.Material3.Button">
+        <item name="android:textAppearance">@style/TextAppearance.GardenPlanner.Body</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:minWidth">120dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:layout_marginHorizontal">8dp</item>
+        <item name="android:layout_marginVertical">4dp</item>
+    </style>
+
+    <!-- Icon button style for garden tool actions -->
+    <style name="Widget.GardenPlanner.Button.Icon" parent="Widget.Material3.Button.Icon">
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="app:iconPadding">0dp</item>
+        <item name="app:iconGravity">textStart</item>
+        <item name="app:iconSize">24dp</item>
+    </style>
+
+    <!-- Base card style for garden interface elements -->
+    <style name="Widget.GardenPlanner.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:background">@color/colorSurface</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="app:cardElevation">4dp</item>
+        <item name="app:cardCornerRadius">12dp</item>
+        <item name="app:cardPreventCornerOverlap">true</item>
+        <item name="app:cardUseCompatPadding">true</item>
+    </style>
+
+    <!-- Specialized card style for plant items -->
+    <style name="Widget.GardenPlanner.Card.Plant" parent="Widget.GardenPlanner.Card">
+        <item name="android:layout_margin">4dp</item>
+        <item name="app:cardElevation">2dp</item>
+        <item name="app:contentPadding">12dp</item>
+        <item name="app:cardBackgroundColor">@color/colorSurface</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="app:rippleColor">@color/colorPrimary</item>
+    </style>
+
+</resources>
