@@ -1,0 +1,105 @@
+# AlertManager Configuration for Garden Planner Application
+# Version: v0.25.0
+
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: 'smtp.example.com:587'
+  smtp_from: 'alertmanager@gardenplanner.com'
+  smtp_auth_username: 'alertmanager'
+  smtp_auth_identity: 'alertmanager'
+  smtp_auth_password: '${SMTP_PASSWORD}'
+  slack_api_url: '${SLACK_API_URL}'
+  pagerduty_url: 'https://events.pagerduty.com/v2/enqueue'
+
+route:
+  group_by: ['alertname', 'cluster', 'service', 'severity']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  receiver: 'devops-team'
+  
+  routes:
+    # Critical alerts with error rate threshold
+    - match:
+        severity: 'critical'
+        error_rate: '>0.01'
+      receiver: 'devops-pager'
+      repeat_interval: 1h
+      continue: true
+
+    # Performance warning alerts
+    - match:
+        severity: 'warning'
+        type: 'performance'
+      receiver: 'devops-slack'
+      repeat_interval: 12h
+      group_wait: 1m
+
+    # Informational alerts
+    - match:
+        severity: 'info'
+      receiver: 'devops-email'
+      repeat_interval: 24h
+      group_wait: 5m
+
+receivers:
+  # Default DevOps team receiver
+  - name: 'devops-team'
+    email_configs:
+      - to: 'devops@gardenplanner.com'
+        send_resolved: true
+        headers:
+          Subject: '{{ template "email.default.subject" . }}'
+        html: '{{ template "email.default.html" . }}'
+
+  # PagerDuty and Slack for critical alerts
+  - name: 'devops-pager'
+    pagerduty_configs:
+      - service_key: '${PAGERDUTY_KEY}'
+        send_resolved: true
+        severity: '{{ .CommonLabels.severity }}'
+        description: '{{ .CommonLabels.alertname }} - {{ .CommonLabels.service }}'
+        client: 'Garden Planner Alertmanager'
+        client_url: '{{ .ExternalURL }}'
+    slack_configs:
+      - channel: '#alerts-critical'
+        send_resolved: true
+        title: '{{ .CommonLabels.alertname }}'
+        text: '{{ .CommonAnnotations.description }}'
+
+  # Slack for warning alerts
+  - name: 'devops-slack'
+    slack_configs:
+      - channel: '#alerts-warning'
+        send_resolved: true
+        title: '{{ .CommonLabels.alertname }}'
+        text: '{{ .CommonAnnotations.description }}'
+
+  # Email for informational alerts
+  - name: 'devops-email'
+    email_configs:
+      - to: 'alerts@gardenplanner.com'
+        send_resolved: true
+        headers:
+          Subject: '{{ template "email.default.subject" . }}'
+        html: '{{ template "email.default.html" . }}'
+
+inhibit_rules:
+  # Inhibit warning alerts when critical alerts are firing
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'cluster', 'service']
+    source_match_re:
+      error_rate: '^0\.[0-9]{2,}$'
+
+  # Inhibit info alerts when warning alerts are firing
+  - source_match:
+      severity: 'warning'
+    target_match:
+      severity: 'info'
+    equal: ['alertname', 'cluster', 'service']
+
+templates:
+  - '/etc/alertmanager/template/*.tmpl'
